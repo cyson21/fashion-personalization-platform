@@ -69,7 +69,7 @@ def test_post_events_success(api_client: Any) -> None:
     }
     response = api_client.post("/events", json=payload)
 
-    assert response.status_code == 200
+    assert response.status_code == 200, response.text
     body = response.json()
 
     assert isinstance(body.get("event_id"), str)
@@ -100,7 +100,7 @@ def test_post_events_unknown_product_returns_404(api_client: Any) -> None:
     }
     response = api_client.post("/events", json=payload)
 
-    assert response.status_code == 404
+    assert response.status_code == 404, response.text
     assert response.json()["detail"] == "unknown product"
 
 
@@ -120,7 +120,8 @@ def test_post_events_idempotency_conflict_returns_409(api_client: Any) -> None:
         "size": "M",
     }
 
-    assert api_client.post("/events", json=first_payload).status_code == 200
+    first_response = api_client.post("/events", json=first_payload)
+    assert first_response.status_code == 200, first_response.text
 
     conflict_response = api_client.post("/events", json=second_payload)
     assert conflict_response.status_code == 409
