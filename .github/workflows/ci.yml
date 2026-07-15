@@ -14,20 +14,50 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      PYTHONHASHSEED: "0"
+      TZ: UTC
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - "3.11"
+          - "3.12"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: ${{ matrix.python-version }}
           cache: pip
       - name: Install project and API test dependencies
-        run: python -m pip install -e ".[dev,api]"
+        run: |
+          mkdir -p artifacts
+          python -m pip install -e ".[dev,api]"
+          python -m pip check | tee artifacts/dependency-check.txt
       - name: Run complete test suite
-        run: python -m pytest --junitxml=artifacts/pytest.xml
+        run: python -m pytest -ra --junitxml=artifacts/pytest.xml
+      - name: Capture CLI scope evidence
+        run: python -m fashion_personalization.cli > artifacts/cli-evidence.json
+      - name: Generate deterministic portfolio evidence
+        env:
+          EVIDENCE_COMMIT: ${{ github.sha }}
+          EVIDENCE_RUNTIME: python-${{ matrix.python-version }}
+        run: |
+          export SOURCE_DATE_EPOCH="$(git show -s --format=%ct HEAD)"
+          python scripts/generate_portfolio_evidence.py \
+            --junit artifacts/pytest.xml \
+            --cli-json artifacts/cli-evidence.json \
+            --output artifacts/portfolio-evidence.json
+      - name: Capture failure diagnostics
+        if: always()
+        run: |
+          mkdir -p artifacts
+          python --version > artifacts/python-version.txt 2>&1
+          python -m pip list --format=freeze | LC_ALL=C sort > artifacts/dependencies.txt
       - name: Upload test evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: fashion-personalization-test-evidence
-          path: artifacts/pytest.xml
+          name: fashion-personalization-test-evidence-py${{ matrix.python-version }}
+          path: artifacts/
           if-no-files-found: error
