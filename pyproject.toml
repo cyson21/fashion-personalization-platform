@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fashion-personalization-platform"
+version = "0.1.0"
+description = "Fashion commerce personalization backend with event processing and batch recommendation workflows."
+requires-python = ">=3.11"
+readme = "README.md"
+dependencies = []
+
+[project.optional-dependencies]
+api = ["fastapi>=0.110", "uvicorn>=0.27"]
+dev = ["pytest>=8"]
+
+[project.scripts]
+fashion-personalization-audit = "fashion_personalization.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+fashion_personalization = ["data/*.json"]

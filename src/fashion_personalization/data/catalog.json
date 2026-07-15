@@ -1,0 +1,68 @@
+[
+  {
+    "product_id": "sku-denim-001",
+    "name": "Wide Fit Indigo Denim",
+    "brand": "Danble Studio",
+    "category": "denim",
+    "price": 89000,
+    "tags": ["casual", "wide-fit", "daily"],
+    "sizes": ["S", "M", "L"],
+    "stock": 12,
+    "margin_rate": 0.42
+  },
+  {
+    "product_id": "sku-knit-002",
+    "name": "Soft Rib Knit Cardigan",
+    "brand": "Danble Studio",
+    "category": "knit",
+    "price": 76000,
+    "tags": ["minimal", "layered", "daily"],
+    "sizes": ["M", "L"],
+    "stock": 8,
+    "margin_rate": 0.38
+  },
+  {
+    "product_id": "sku-jacket-003",
+    "name": "Cropped Vegan Leather Jacket",
+    "brand": "Urban Muse",
+    "category": "outer",
+    "price": 159000,
+    "tags": ["street", "cropped", "seasonal"],
+    "sizes": ["S", "M"],
+    "stock": 2,
+    "margin_rate": 0.33
+  },
+  {
+    "product_id": "sku-dress-004",
+    "name": "A-line Weekend Dress",
+    "brand": "Linen Archive",
+    "category": "dress",
+    "price": 119000,
+    "tags": ["feminine", "linen", "weekend"],
+    "sizes": ["S", "M", "L"],
+    "stock": 15,
+    "margin_rate": 0.45
+  },
+  {
+    "product_id": "sku-bag-005",
+    "name": "Mini Bucket Bag",
+    "brand": "Urban Muse",
+    "category": "bag",
+    "price": 68000,
+    "tags": ["accessory", "minimal", "daily"],
+    "sizes": ["FREE"],
+    "stock": 24,
+    "margin_rate": 0.52
+  },
+  {
+    "product_id": "sku-shoes-006",
+    "name": "Square Toe Loafer",
+    "brand": "Linen Archive",
+    "category": "shoes",
+    "price": 132000,
+    "tags": ["classic", "office", "leather"],
+    "sizes": ["230", "240", "250"],
+    "stock": 0,
+    "margin_rate": 0.36
+  }
+]
