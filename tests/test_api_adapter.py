@@ -42,6 +42,21 @@ def test_fastapi_adapter_registers_expected_routes() -> None:
     assert "/admin/report" in route_paths
 
 
+@pytest.mark.skipif(importlib.util.find_spec("fastapi") is None, reason="FastAPI optional dependency is not installed")
+def test_events_openapi_declares_required_json_body_instead_of_query_payload() -> None:
+    from fashion_personalization.api import create_app
+
+    operation = create_app().openapi()["paths"]["/events"]["post"]
+
+    assert operation["requestBody"]["required"] is True
+    assert "application/json" in operation["requestBody"]["content"]
+    assert "payload" not in {
+        parameter["name"]
+        for parameter in operation.get("parameters", [])
+        if parameter.get("in") == "query"
+    }
+
+
 def test_get_products_returns_seeded_data_and_filtering(api_client: Any) -> None:
     all_products_response = api_client.get("/products")
     assert all_products_response.status_code == 200
@@ -88,6 +103,40 @@ def test_post_events_validation_error(api_client: Any) -> None:
     response = api_client.post("/events", json=payload)
 
     assert response.status_code == 422
+
+
+@pytest.mark.parametrize("invalid_json", [None, [], "event", 42])
+def test_post_events_rejects_non_object_json_body(api_client: Any, invalid_json: Any) -> None:
+    response = api_client.post("/events", json=invalid_json)
+
+    assert response.status_code == 422, response.text
+    assert response.json()["detail"]
+
+
+@pytest.mark.parametrize(
+    "patch",
+    [
+        {"event_type": "unsupported"},
+        {"idempotency_key": "short"},
+        {"unexpected": "field"},
+    ],
+)
+def test_post_events_rejects_invalid_enum_short_key_and_extra_fields(
+    api_client: Any,
+    patch: dict[str, str],
+) -> None:
+    payload = {
+        "user_id": "u-api-invalid",
+        "product_id": "sku-denim-001",
+        "event_type": "view",
+        "idempotency_key": "post-evt-invalid-001",
+    }
+    payload.update(patch)
+
+    response = api_client.post("/events", json=payload)
+
+    assert response.status_code == 422, response.text
+    assert response.json()["detail"]
 
 
 def test_post_events_unknown_product_returns_404(api_client: Any) -> None:
