@@ -9,7 +9,7 @@ from fashion_personalization.store import IdempotencyConflict
 
 def create_app() -> Any:
     try:
-        from fastapi import Depends, FastAPI, Header, HTTPException, Query
+        from fastapi import Body, Depends, FastAPI, Header, HTTPException, Query
         from pydantic import BaseModel, ConfigDict, Field
     except ModuleNotFoundError as exc:  # pragma: no cover - depends on optional install
         raise RuntimeError("FastAPI adapter requires `pip install -e .[api]`.") from exc
@@ -67,7 +67,7 @@ def create_app() -> Any:
         ]
 
     @app.post("/events")
-    def record_event(payload: EventRequest) -> dict[str, Any]:
+    def record_event(payload: EventRequest = Body()) -> dict[str, Any]:
         if service.store.get_product(payload.product_id) is None:
             raise HTTPException(status_code=404, detail="unknown product")
         try:
