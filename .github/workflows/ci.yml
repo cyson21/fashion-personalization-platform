@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install project and API test dependencies
+        run: python -m pip install -e ".[dev,api]"
+      - name: Run complete test suite
+        run: python -m pytest --junitxml=artifacts/pytest.xml
+      - name: Upload test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fashion-personalization-test-evidence
+          path: artifacts/pytest.xml
+          if-no-files-found: error
