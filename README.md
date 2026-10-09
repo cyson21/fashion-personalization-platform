@@ -6,7 +6,7 @@
 
 데이터는 메모리에 저장하고, 추천은 머신러닝이 아니라 정해 둔 점수 규칙으로 만듭니다. 핵심 로직은 외부 서비스 없이 돌고, FastAPI는 필요할 때 붙이는 구조입니다.
 
-[포트폴리오](https://cyson21.github.io/projects/fashion-personalization-platform/) · [이력서](https://github.com/cyson21/portfolio-hub/releases/download/latest/resume.pdf)
+[포트폴리오](https://cyson21.github.io/projects/fashion-personalization-platform/) · [이력서](https://cyson21.github.io/downloads/resume.pdf)
 
 ## 풀려던 문제
 
@@ -126,3 +126,12 @@ curl -fsS -H 'X-Admin-Token: demo-admin' http://127.0.0.1:8000/admin/report
 |---|---|
 | [Architecture](docs/architecture.md) | 핵심 로직과 AWS 전환 후보를 분리한 구조 |
 | [API and Data Model](docs/api-data-model.md) | 실제 FastAPI endpoint와 도메인 모델 |
+
+## 관련 프로젝트와 공개 자료
+
+이 저장소의 코드·실행·테스트는 이 저장소에서 관리합니다. [웹 포트폴리오의 프로젝트 설명](https://cyson21.github.io/projects/fashion-personalization-platform/)과 [공개 자료 안내](https://github.com/cyson21/portfolio-hub)는 외부에서 구현 근거를 찾는 진입점입니다.
+
+- 관련 주제: [cdc-data-platform](https://github.com/cyson21/cdc-data-platform) — 행동 이벤트·추천 배치와 변경 데이터 파이프라인 비교.
+- 최신 제출 파일: [이력서 PDF](https://cyson21.github.io/downloads/resume.pdf) · [경력기술서 PDF](https://cyson21.github.io/downloads/career-description.pdf).
+
+위 관련 저장소는 별도로 실행하는 개인 프로젝트입니다. 서로의 서비스를 순서대로 띄우거나 실제 API·메시지로 연결한 E2E 체인이 구현됐다는 의미는 아닙니다. 구현·검증 범위가 바뀌면 이 README와 웹 프로젝트 문안을 함께 확인합니다.
